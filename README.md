@@ -1,3 +1,64 @@
+#Circlead
+
+## Pre-install
+You need a running nodejs-universe, so you need to install
+```
+sudo apt-get install nodejs
+sudo apt-get install npm
+```
+Because this is a [react-native-app](https://facebook.github.io/react-native/), you need to install
+```
+npm install -g create-react-native-app
+```
+To get a running react-native, you need a running watchman. For this you need to compile and install it with
+```
+git clone https://github.com/facebook/watchman.git
+cd watchman
+git checkout v4.9.0  # the latest stable release
+./autogen.sh
+./configure
+make
+sudo make install
+```
+
+## Install
+
+Download with
+```
+git clone https://github.com/matthiaw/circlead.git
+cd circlead
+```
+and istall depended packages with
+```
+sudo npm install
+```
+Start the App with
+```
+sudo npm start
+```
+
+## Filestructure
+* .expo/ - Directory which is created by expo
+* assets/ - Directory which holds the assets of the App
+* node_modules/ - Directory which holds all node-packages
+* src/
+  * Components - Directory which defines all react-components
+  * Navigation - Navigation-Files of React
+  * Reducers - Reducers of Redux
+  * Schemas - Schemas (for database, tests)
+  * Util - Utils, like Cloud-Database
+* .babelrc - Configuration for babel, see https://babeljs.io/docs/usage/babelrc/
+* .flowconfig - Configuration for type checking in JavaScript, see https://medium.com/react-native-training/getting-started-with-react-native-and-flow-d40f55746809
+* .gitignore - Configuration for git, to exclude node_modules from git
+* .watchmanconfig - Configuration for watchman.
+* App.js - Main starter of the App
+* app.json - Configuration to run React-Native-App with Expo, see https://docs.expo.io/versions/latest/guides/configuration.html
+* App.scss - Main Stylesheet of the App
+* package.json - Main Configuration of the App with all needed packages
+* README.md - Documentation of th App, written in Markdown, used at git-repository
+* rn-cli.config.js - Configuration for React-Native, added scss-interpreter as importer
+* store.js
+
 # React-Native Project
 
 This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
