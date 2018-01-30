@@ -1,4 +1,6 @@
-#Circlead
+# Circlead
+
+React-Native Application which uses Cloud-Database [Firebase](https://firebase.google.com/), React-Navigation and Redux (see [Example](https://hackernoon.com/a-comprehensive-guide-for-integrating-react-navigation-with-redux-including-authentication-flow-cb7b90611adf)).
 
 ## Pre-install
 You need a running nodejs-universe, so you need to install
@@ -10,7 +12,7 @@ Because this is a [react-native-app](https://facebook.github.io/react-native/), 
 ```
 npm install -g create-react-native-app
 ```
-To get a running react-native, you need a running watchman. For this you need to compile and install it with
+To get a running react-native, you need a running [watchman](https://facebook.github.io/watchman/). For this you need to compile and install it with
 ```
 git clone https://github.com/facebook/watchman.git
 cd watchman
@@ -57,7 +59,7 @@ sudo npm start
 * package.json - Main Configuration of the App with all needed packages
 * README.md - Documentation of th App, written in Markdown, used at git-repository
 * rn-cli.config.js - Configuration for React-Native, added scss-interpreter as importer
-* store.js
+* store.js - Configuration for Redux
 
 # React-Native Project
 
