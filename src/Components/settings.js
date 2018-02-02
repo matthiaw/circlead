@@ -14,7 +14,7 @@ export default class Settings extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "orange" }}>
-        <Text>{this.props.navigation.state.params.name}</Text>
+        <Text>{this.props.navigation.state.params.param}</Text>
       </View>
     );
   }

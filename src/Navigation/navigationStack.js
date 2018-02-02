@@ -1,10 +1,11 @@
 import { StackNavigator } from "react-navigation";
 import { Platform } from "react-native";
 import Home from "../Components/home";
-import Roles from "../Components/roles";
 import Settings from "../Components/settings";
-import Roles2 from "../Components/roles2";
+import Roles from "../Components/roles";
 import Role from "../Components/role";
+import Organisations from "../Components/organisations";
+import Authentification from "../Components/authentification";
 
 const navigator = StackNavigator(
 {
@@ -17,11 +18,14 @@ const navigator = StackNavigator(
   settings: {
     screen: Settings
   },
-  roles2: {
-    screen: Roles2
-  },
   role: {
     screen: Role
+  },
+  organisations: {
+    screen: Organisations
+  },
+  authentification: {
+    screen: Authentification
   }
  },
  {

@@ -12,15 +12,9 @@ const componentName = 'home';
 var renderData = JSON.parse(`{
     "entries": [
       {
-        "label": "Rollen (Statisches JSON)",
+        "label": "Rollen",
         "description" : "Eine Liste aller Rollen",
         "route": "roles",
-        "param": ""
-      },
-      {
-        "label": "Rollen (Cloud)",
-        "description" : "Eine Liste aller Rollen",
-        "route": "roles2",
         "param": ""
       },
       {
@@ -28,6 +22,18 @@ var renderData = JSON.parse(`{
         "description" : "Einstellungen von Circlead",
         "route": "settings",
         "param": "Settings parameter"
+      },
+      {
+        "label": "Organisations",
+        "description" : "List of organisations",
+        "route": "organisations",
+        "param": ""
+      },
+      {
+        "label": "Authentizierung",
+        "description" : "Login / SignUp",
+        "route": "authentification",
+        "param": ""
       }
     ]
 }`);
@@ -68,7 +74,7 @@ class HomeView extends Component {
         const route = item.route;
         const navigateAction = NavigationActions.navigate({
           routeName: route,
-          params: { name: param }
+          params: { param: param }
         });
         navigation.dispatch(navigateAction);
       }} />
@@ -76,8 +82,15 @@ class HomeView extends Component {
   }
 
   render() {
+    let loggedUser;
+    if (this.props.username) {
+      loggedUser = <Text>
+          {`Welcome ${this.props.username}`}
+      </Text>
+    }
     return (
       <View style={{ flex: 1 }}>
+        {loggedUser}
         <ScrollView style={{ flex: 1 }}>
           { renderData.entries.map(item => this.renderItem(item, this.props.navigation)) }
         </ScrollView>
@@ -87,4 +100,12 @@ class HomeView extends Component {
   }
 }
 
-export default HomeView;
+//export default HomeView;
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        username: state.AuthentificationReducer.username
+    };
+}
+
+export default connect(mapStateToProps)(HomeView);

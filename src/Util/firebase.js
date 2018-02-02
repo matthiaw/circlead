@@ -2,7 +2,6 @@ const fb = require("firebase");
 // Required for side-effects
 require("firebase/firestore");
 
-/*
 var config = {
   apiKey: "AIzaSyAKuRSiyUNi5XlrIYhJN8sTGasYrHohqTM",
   authDomain: "circlead-f1cab.firebaseapp.com",
@@ -10,15 +9,6 @@ var config = {
   projectId: "circlead-f1cab",
   storageBucket: "circlead-f1cab.appspot.com",
   messagingSenderId: "545756934124"
-};*/
-
-var config = {
-  apiKey: "AIzaSyDviZwXlaomNCO89rMKeqp_dau772lQihA",
-  authDomain: "circlead-test.firebaseapp.com",
-  databaseURL: "https://circlead-test.firebaseio.com",
-  projectId: "circlead-test",
-  storageBucket: "circlead-test.appspot.com",
-  messagingSenderId: "948137755400"
 };
 
 const Firebase = fb.initializeApp(config);
