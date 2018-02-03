@@ -6,6 +6,7 @@ import Roles from "../Components/roles";
 import Role from "../Components/role";
 import Organisations from "../Components/organisations";
 import Authentification from "../Components/authentification";
+import Tasks from "../Components/tasks";
 
 const navigator = StackNavigator(
 {
@@ -23,6 +24,9 @@ const navigator = StackNavigator(
   },
   organisations: {
     screen: Organisations
+  },
+  tasks: {
+    screen: Tasks
   },
   authentification: {
     screen: Authentification

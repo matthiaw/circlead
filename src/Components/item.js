@@ -1,10 +1,6 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity, ScrollView, StatusBar, Dimensions } from "react-native";
-import { NavigationActions, SafeAreaView } from "react-navigation";
-import Image from 'react-native-remote-svg';
-import { connect } from "react-redux";
+import { Text, TouchableOpacity} from "react-native";
 import Styles from "./../../App.scss";
-const Uuid = require('uuid/v1');
 
 
 class Item extends Component {

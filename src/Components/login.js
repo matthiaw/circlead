@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, Text, TextInput, View, Button } from 'react-native';
+import { ScrollView, Text, TextInput, View, Button, StatusBar } from 'react-native';
 import { login } from '../Actions/authentification';
 import Firebase from "./../Util/firebase";
 
 class Login extends Component {
+
     constructor (props) {
         super(props);
         this.state = {
@@ -21,7 +22,7 @@ class Login extends Component {
 
         // Sign up
         if (this.state.page === 'SignUp') {
-          console.log("SignUp");
+          //console.log("SignUp");
           Firebase.auth().createUserWithEmailAndPassword(this.state.username, this.state.password).then((user) => {
             this.props.onLogin(user.email, this.state.password);
           }).catch((err) => {
@@ -31,7 +32,7 @@ class Login extends Component {
           })
         } else {
           // Login
-          console.log("Login: "+this.state.username+", "+ this.state.password);
+          //console.log("Login: "+this.state.username+", "+ this.state.password);
           Firebase.auth().signInWithEmailAndPassword(this.state.username, this.state.password).then((user) => {
             this.props.onLogin(user.email, this.state.password);
           }).catch((err) => {

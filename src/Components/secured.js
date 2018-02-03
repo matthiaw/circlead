@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, Text, View, Button } from 'react-native';
+import { ScrollView, Text, View, Button, StatusBar } from 'react-native';
 import { logout } from '../Actions/authentification';
 
 class Secured extends Component {
+
     userLogout(e) {
         this.props.onLogout();
         e.preventDefault();
