@@ -95,10 +95,4 @@ class HomeView extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        username: state.AuthentificationReducer.username
-    };
-}
-
 export default LoggedUser(HomeView);
