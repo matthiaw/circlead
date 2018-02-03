@@ -21,8 +21,8 @@ var renderData = JSON.parse(`{
         "param": "Settings parameter"
       },
       {
-        "label": "Organisations",
-        "description" : "List of organisations",
+        "label": "Organisationen",
+        "description" : "Liste aller Organisationen",
         "route": "organisations",
         "param": ""
       },

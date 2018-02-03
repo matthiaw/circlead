@@ -1,16 +1,9 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Modal, Button, TouchableOpacity } from "react-native";
-import Styles from "./../../App.scss";
+import {NO_Title, Styles} from "./../Util/Utils";
 
-export default class Settings extends Component {
-  static navigationOptions = {
-    title: "Einstellungen",
-    headerTintColor: Styles.ci_Header.color,
-    headerStyle: {
-      height: Styles.ci_Header.height,
-      backgroundColor: Styles.ci_Header.backgroundColor
-    }
-  };
+export default class Organisations extends Component {
+  static navigationOptions = NO_Title("Organisationen");
 
   state = {
    modalVisible: false,
