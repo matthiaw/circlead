@@ -35,7 +35,7 @@ export default class Roles2 extends Component {
       var items = [];
       querySnapshot.forEach((child) => {
         items.push({
-          label: `${child.data().label}`,
+          title: `${child.data().title}`,
           description: `${child.data().description}`,
           id: `${child.id}`
         });
@@ -71,13 +71,13 @@ export default class Roles2 extends Component {
 
   renderItem(item, navigation) {
     return (
-      <Item key={Uuid()} label={item.label} description={item.description} onPress={ () => {
+      <Item key={Uuid()} label={item.title} description={item.description} onPress={ () => {
         const param = item.param;
         const route = item.route;
         const navigateAction = NavigationActions.navigate({
           routeName: 'role',
           params: {
-            label: `${item.label}`,
+            title: `${item.title}`,
             description: `${item.description}`,
             id: `${item.id}`
           }
@@ -107,7 +107,7 @@ export default class Roles2 extends Component {
             const id = `${Uuid()}`;
             var data = {
               id: {id},
-              label: `Neue Rolle (${id.substring(0,6)}...)`,
+              title: `Neue Rolle (${id.substring(0,6)}...)`,
               description: ''
             };
             var setDoc = db.collection('roles').doc(id).set(data);

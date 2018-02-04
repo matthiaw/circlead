@@ -20,7 +20,7 @@ const options = {
 
 var RoleForm = t.struct({
   // Id is hidden, because it should not be editable
-  label: t.String,                // a required string
+  title: t.String,                // a required string
   description: t.maybe(t.String)  // an optional string
 });
 
@@ -44,7 +44,7 @@ class RoleView extends Component {
 
         // set data from form
         var data = {
-          label: `${formValues.label}`,
+          title: `${formValues.title}`,
           description: `${formValues.description}`,
           id: `${params.id}`
         };
@@ -98,9 +98,9 @@ class RoleView extends Component {
           <View style={Styles.ci_formContainer}>
             <Text style={Styles.ci_formLabel}>ID</Text>
             <Text style={Styles.ci_formText}>{params.id}</Text>
-            <Text style={Styles.ci_formLabel}>Label</Text>
-            <Text style={Styles.ci_formText}>{params.label}</Text>
-            <Text style={Styles.ci_formLabel}>Description</Text>
+            <Text style={Styles.ci_formLabel}>Titel</Text>
+            <Text style={Styles.ci_formText}>{params.title}</Text>
+            <Text style={Styles.ci_formLabel}>Beschreibung</Text>
             <Text style={Styles.ci_formText}>{params.description}</Text>
           </View>
       }
@@ -121,7 +121,7 @@ class RoleView extends Component {
       const { state, setParams } = navigation;
       const { params } = state;
       return {
-        headerTitle: `${params.label}`,
+        headerTitle: `${params.title}`,
         headerTintColor: Styles.ci_Header.color,
         headerStyle: {
           height: Styles.ci_Header.height,
