@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Text, View, TouchableOpacity, ScrollView, StatusBar, Dimensions } from "react-native";
-import Login from './login';
-import Secured from './secured';
-import {NO_Title, Styles} from "./../Util/Utils";
+import Login from './login.component';
+import Secured from './secured.component';
+import {NO_Title, Styles} from "./../Util";
 
 class Authentification extends Component {
   static navigationOptions = NO_Title("Authentifzierung");

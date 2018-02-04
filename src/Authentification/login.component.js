@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView, Text, TextInput, View, Button, StatusBar } from 'react-native';
-import { login } from '../Actions/authentification';
+import { login } from './authentification.action';
 import Firebase from "./../Util/firebase";
 
 class Login extends Component {

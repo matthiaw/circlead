@@ -5,7 +5,7 @@ import Settings from "../Components/settings";
 import Roles from "../Components/roles";
 import Role from "../Components/role";
 import Organisations from "../Components/organisations";
-import Authentification from "../Components/authentification";
+import Authentification from "./../Authentification";
 import Tasks from "../Components/tasks";
 
 const navigator = StackNavigator(

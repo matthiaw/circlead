@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import NavigationReducer from "./navigationReducer";
-import AuthentificationReducer from "./authentificationReducer";
+import NavigationReducer from "./../Navigation/navigation.reducer";
+import AuthentificationReducer from "./../Authentification/authentification.reducer";
 
 function lastAction(state = null, action) {
   return action;

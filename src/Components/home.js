@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity, ScrollView, StatusBar, Dimensions } from "react-native";
 import { NavigationActions, SafeAreaView } from "react-navigation";
-import {LoggedUser, Styles, Uuid, NO_TitleIcon} from "./../Util/Utils";
+import {LoggedUser, Styles, Uuid, NO_TitleIcon} from "./../Util";
 import Item from "./item";
 
 const componentName = 'home';

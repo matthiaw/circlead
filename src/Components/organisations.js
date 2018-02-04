@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Modal, Button, TouchableOpacity } from "react-native";
-import {NO_Title, Styles} from "./../Util/Utils";
+import {NO_Title, Styles} from "./../Util";
 
 export default class Organisations extends Component {
   static navigationOptions = NO_Title("Organisationen");

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { addNavigationHelpers } from "react-navigation";
-import NavigationStack from "./navigationStack";
+import NavigationStack from "./navigation.stack";
 
 class AppNavigation extends Component {
 	static propTypes = {

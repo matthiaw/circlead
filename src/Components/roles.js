@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { Text, View, TouchableHighlight, TouchableOpacity, ListView, StatusBar, ScrollView, StyleSheet } from "react-native";
-import Styles from "./../../App.scss";
 import Firebase from "./../Util/firebase";
 import Item from "./item";
-const Uuid = require('uuid/v1');
+import {Uuid, Styles} from "./../Util";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { NavigationActions, SafeAreaView } from "react-navigation";
 import { connect } from "react-redux";

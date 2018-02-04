@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity, TouchableHighlight, ScrollView, StatusBar, StyleSheet } from "react-native";
 import { NavigationActions, SafeAreaView } from "react-navigation";
-import Styles from "./../../App.scss";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Firebase from "./../Util/firebase";
+import {Styles} from "./../Util";
 var t = require('tcomb-form-native');
 var db = Firebase.firestore();
 var Form = t.form.Form;
