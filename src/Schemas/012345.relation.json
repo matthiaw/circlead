@@ -1,0 +1,15 @@
+{
+	"id": "e7b76b50-0aa1-11e8-baf6-21cc79765338",
+	"type": "isSkilled",
+	"source": {
+		"item": "role",
+		"id": "e7b76b50-0aa1-11e8-baf6-21cc79765338"
+	},
+	"target": {
+		"item": "role",
+		"id": "e7b76b50-0aa1-11e8-baf6-21cc79765338"
+	},
+	"status": "draft",
+	"comment": "A comment",
+	"skill": 25
+}

@@ -1,100 +1,28 @@
 {
-	"definitions": {
-		"relation": {
-			"type": "object",
-			"oneOf": [
-				{
-					"title": "Skill-Relation",
-					"description": "Relation of the role to a skilled person",
-					"properties": {
-						"person": {
-							"type": "number",
-							"title": "Person-ID",
-							"description": "ID of person which has skill of role"
-						},
-						"skill": {
-							"title": "Skill",
-							"description": "Skill could be btw. 0-100%",
-							"enum": [
-								100,
-								75,
-								50,
-								25,
-								0
-							]
-						},
-						"status": {
-							"title": "Status",
-							"description": "Status of skill-training, like wanted, trained, ...",
-							"type": "string",
-							"default": "untrained"
-						},
-						"comment": {
-							"title": "Comment",
-							"description": "Comment for skilles person to this role.",
-							"type": "string"
-						},
-						"type": {
-							"title": "Type",
-							"description": "Type of relation is Skill-Level between person which takes the role.",
-							"enum": [
-								"skill"
-							]
-						}
-					},
-					"required": [
-						"type",
-						"skill",
-						"person",
-						"status"
-					]
-				},
-				{
-					"title": "RBS-Relation",
-					"description": "Relation of the role-breakdown",
-					"properties": {
-						"parent": {
-							"type": "number",
-							"title": "Parent Role-ID",
-							"description": "ID of parent role."
-						},
-						"comment": {
-							"type": "string",
-							"title": "Comment",
-							"description": "Comment to relation."
-						},
-						"type": {
-							"title": "Type",
-							"description": "Relation-Type is RBS, which stands doe Role-Breakdown-Structure.",
-							"enum": [
-								"rbs"
-							]
-						}
-					},
-					"required": [
-						"type",
-						"parent"
-					]
-				}
-			]
-		}
-	},
 	"$schema": "http://json-schema.org/draft-06/schema#",
 	"$id": "http://example.com/example.json",
 	"type": "object",
 	"properties": {
 		"id": {
 			"$id": "/properties/id",
-			"type": "integer",
+			"type": "string",
 			"title": "Id of Role",
+			"pattern": "^[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$",
 			"examples": [
-				1
+				"e7b76b50-0aa1-11e8-baf6-21cc79765338"
 			]
 		},
 		"title": {
 			"$id": "/properties/title",
+			"title": "Title",
 			"type": "string",
 			"description": "Title of the role"
+		},
+		"description": {
+			"$id": "/properties/title",
+			"title": "Description",
+			"type": "string",
+			"description": "Description of the role"
 		},
 		"abbreviation": {
 			"$id": "/properties/abbreviation",
@@ -107,26 +35,50 @@
 			]
 		},
 		"relations": {
+			"$id": "/properties/relations",
 			"title": "Relations",
 			"description": "Relations of the role",
 			"type": "array",
 			"items": {
-				"$ref": "#/definitions/relation"
+				"$id": "/properties/relations/relation",
+				"title": "Relation",
+				"type": "string",
+				"description": "A Relation of the role",
+				"pattern": "^[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$",
+				"examples": [
+					"e7b76b50-0aa1-11e8-baf6-21cc79765338"
+				]
 			}
 		},
 		"status": {
 			"$id": "/properties/status",
 			"type": "string",
 			"enum": [
-				"draft",
-				"accepted",
-				"deprecated",
-				"closed"
-			],
+        "draft",
+        "deprecated",
+        "outdated",
+        "closed",
+        "accepted",
+        "alive",
+        "reviewed",
+        "ready"
+      ],
 			"title": "Status",
 			"examples": [
 				"draft"
 			]
+		},
+		"labels": {
+			"$id": "/properties/labels",
+			"title": "Labels",
+			"description": "Labels of the role",
+			"type": "array",
+			"items": {
+				"$id": "/properties/labels/label",
+				"title": "Label",
+				"type": "string",
+				"description": "Label of the role"
+			}
 		}
 	},
 	"required": [

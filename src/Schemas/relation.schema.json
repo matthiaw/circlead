@@ -1,0 +1,152 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "properties": {
+    "id": {
+      "title": "Id",
+      "description": "Uuid which is used as key of relation.",
+      "$id": "/properties/id",
+      "type": "string",
+      "title": "Id",
+      "description": "Uuid of relation.",
+      "pattern": "^[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$",
+      "examples": [
+        "e7b76b50-0aa1-11e8-baf6-21cc79765338"
+      ]
+    },
+    "type": {
+      "$id": "/properties/type",
+      "title": "Type of relation",
+      "description": "takesResponsibility (role-responsibility), isOrganized (function-function), isRelated (role-function), worksOn (role-task), isSuccessor (competence-competence), isChild (role-role), hasAuthority (role-authority), isRuledBy (role-rule), isSkilled (role-person), isTrained (person-task)",
+      "enum": [
+        "worksOn",
+        "hasAuthority",
+        "isOrganized",
+        "isRelated",
+        "takesResponsibility",
+        "isSkilled",
+        "isTrained",
+        "isSuccesor",
+        "isRuledBy",
+        "isChild"
+      ]
+    },
+    "source": {
+      "title": "Source",
+      "description": "Reference to source item with named type",
+      "$id": "/properties/source",
+      "type": "object",
+      "properties": {
+        "item": {
+          "$id": "/properties/source/properties/item",
+          "title": "Source Item",
+          "description": "Type of source item",
+          "enum": [
+            "role",
+            "function",
+            "task",
+            "competence",
+            "person",
+            "responsibility",
+            "authority"
+          ]
+        },
+        "id": {
+          "$id": "/properties/source/properties/id",
+          "type": "string",
+          "title": "Id of Source",
+          "description": "Uuid of related source.",
+          "pattern": "^[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$",
+          "examples": [
+            "e7b76b50-0aa1-11e8-baf6-21cc79765338"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "item"
+      ]
+    },
+    "target": {
+      "title": "Target",
+      "description": "Reference to target item with named type",
+      "$id": "/properties/target",
+      "type": "object",
+      "properties": {
+        "item": {
+          "$id": "/properties/target/properties/item",
+          "title": "Target Item",
+          "description": "Type of target item",
+          "enum": [
+            "role",
+            "function",
+            "task",
+            "competence",
+            "person",
+            "responsibility",
+            "authority"
+          ]
+        },
+        "id": {
+          "$id": "/properties/target/properties/id",
+          "type": "string",
+          "title": "Id of Target",
+          "description": "Uuid of related target.",
+          "pattern": "^[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$",
+          "examples": [
+            "e7b76b50-0aa1-11e8-baf6-21cc79765338"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "item"
+      ]
+    },
+    "status": {
+      "$id": "/properties/status",
+      "title": "Status",
+      "description": "Status of relation.",
+      "enum": [
+        "draft",
+        "deprecated",
+        "outdated",
+        "closed",
+        "accepted",
+        "alive",
+        "reviewed",
+        "ready"
+      ]
+    },
+    "comment": {
+      "$id": "/properties/comment",
+      "type": "string",
+      "title": "Comment",
+      "description": "Comment for relation.",
+      "default": "",
+      "examples": [
+        "x d f g d"
+      ]
+    },
+    "skill": {
+      "title": "Skill",
+      "description": "Skill could be btw. 0-100%",
+      "enum": [
+        100,
+        75,
+        50,
+        25,
+        0
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "source",
+    "target",
+    "status"
+  ]
+}
