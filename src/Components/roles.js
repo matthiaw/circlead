@@ -7,13 +7,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { NavigationActions, SafeAreaView } from "react-navigation";
 import { connect } from "react-redux";
 
-const componentName = 'roles2';
+//const componentName = 'roles2';
 var db = Firebase.firestore();
 //Firebase.firestore().enablePersistence();
 
 const list = ['Loading...']
 
-export default class Roles2 extends Component {
+export default class Roles extends Component {
 
   constructor(props) {
     super(props);
@@ -106,7 +106,7 @@ export default class Roles2 extends Component {
           onPress={() => {
             const id = `${Uuid()}`;
             var data = {
-              id: {id},
+              id: `${id}`,
               title: `Neue Rolle (${id.substring(0,6)}...)`,
               description: ''
             };

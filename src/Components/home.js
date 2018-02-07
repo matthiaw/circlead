@@ -4,8 +4,6 @@ import { NavigationActions, SafeAreaView } from "react-navigation";
 import {LoggedUser, Styles, Uuid, NO_TitleIcon} from "./../Util";
 import Item from "./item";
 
-const componentName = 'home';
-
 var renderData = JSON.parse(`{
     "entries": [
       {
@@ -15,10 +13,34 @@ var renderData = JSON.parse(`{
         "param": ""
       },
       {
-        "label": "Einstellungen",
-        "description" : "Einstellungen von Circlead",
-        "route": "settings",
-        "param": "Settings parameter"
+        "label": "Kompetenzen",
+        "description" : "Liste aller Kompetenzen",
+        "route": "competences",
+        "param": "test param"
+      },
+      {
+        "label": "Aufgaben",
+        "description" : "Liste aller Aufgaben",
+        "route": "tasks",
+        "param": "test param"
+      },
+      {
+        "label": "Verantwortungen",
+        "description" : "Liste aller Verantwortungen",
+        "route": "responsibilities",
+        "param": "test param"
+      },
+      {
+        "label": "Befugnisse",
+        "description" : "Liste aller Befugnisse",
+        "route": "authorities",
+        "param": "test param"
+      },
+      {
+        "label": "Prinzipien",
+        "description" : "Liste aller Prinzipien",
+        "route": "rules",
+        "param": "test param"
       },
       {
         "label": "Organisationen",
@@ -27,10 +49,22 @@ var renderData = JSON.parse(`{
         "param": ""
       },
       {
-        "label": "Aufgaben",
-        "description" : "Liste aller Aufgaben",
-        "route": "tasks",
+        "label": "Funktionsbereiche",
+        "description" : "Liste aller Funktionsbereiche",
+        "route": "functions",
         "param": "test param"
+      },
+      {
+        "label": "Personen",
+        "description" : "Liste aller Personen",
+        "route": "persons",
+        "param": "test param"
+      },
+      {
+        "label": "Einstellungen",
+        "description" : "Einstellungen von Circlead",
+        "route": "settings",
+        "param": "Settings parameter"
       },
       {
         "label": "Authentizierung",

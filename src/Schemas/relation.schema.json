@@ -19,8 +19,9 @@
     "type": {
       "$id": "/properties/type",
       "title": "Type of relation",
-      "description": "takesResponsibility (role-responsibility), isOrganized (function-function), isRelated (role-function), worksOn (role-task), isSuccessor (competence-competence), isChild (role-role), hasAuthority (role-authority), isRuledBy (role-rule), isSkilled (role-person), isTrained (person-task)",
+      "description": "contains (organisation-role), takesResponsibility (role-responsibility), isOrganized (function-function), isRelated (role-function), worksOn (role-task), isSuccessor (competence-competence), isChild (role-role), hasAuthority (role-authority), isRuledBy (role-rule), isSkilled (role-person), isTrained (person-task)",
       "enum": [
+        "contains",
         "worksOn",
         "hasAuthority",
         "isOrganized",
@@ -45,8 +46,10 @@
           "description": "Type of source item",
           "enum": [
             "role",
+            "rule",
             "function",
             "task",
+            "organisation",
             "competence",
             "person",
             "responsibility",
@@ -82,8 +85,10 @@
           "enum": [
             "role",
             "function",
+            "rule",
             "task",
             "competence",
+            "organisation",
             "person",
             "responsibility",
             "authority"
