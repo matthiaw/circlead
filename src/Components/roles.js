@@ -107,8 +107,10 @@ export default class Roles extends Component {
             const id = `${Uuid()}`;
             var data = {
               id: `${id}`,
+              abbreviation: '',
               title: `Neue Rolle (${id.substring(0,6)}...)`,
-              description: ''
+              description: '',
+              status: 'draft'
             };
             var setDoc = db.collection('roles').doc(id).set(data);
           }}

@@ -20,10 +20,20 @@ const options = {
   stylesheet: stylesheet
 };
 
+const status = t.enums.of([
+  'draft',
+  'deprecated',
+  'accepted',
+  'closed'
+], 'status')
+
 var RoleForm = t.struct({
   // Id is hidden, because it should not be editable
   title: t.String,                // a required string
-  description: t.maybe(t.String)  // an optional string
+  abbreviation: t.String,         // a required string
+  description: t.maybe(t.String),  // an optional string
+  status,
+  labels: t.list(t.String)
 });
 
 class RoleView extends Component {
@@ -62,10 +72,16 @@ class RoleView extends Component {
 
         // set data from form
         var data = {
+          abbreviation: `${formData.abbreviation}`,
           title: `${formData.title}`,
           description: `${formData.description}`,
-          id: `${params.id}`
+          id: `${params.id}`,
+          status: `${formData.status}`,
+          labels: formData.labels
         };
+
+        //console.log(formData);
+        //console.log(data);
 
         this.setState({data: data});
 
@@ -119,10 +135,18 @@ class RoleView extends Component {
             <View style={Styles.ci_formContainer}>
               <Text style={Styles.ci_formLabel}>ID</Text>
               <Text style={Styles.ci_formText}>{data.id}</Text>
+              <Text style={Styles.ci_formLabel}>Kürzel</Text>
+              <Text style={Styles.ci_formText}>{data.abbreviation}</Text>
               <Text style={Styles.ci_formLabel}>Titel</Text>
               <Text style={Styles.ci_formText}>{data.title}</Text>
               <Text style={Styles.ci_formLabel}>Beschreibung</Text>
               <Text style={Styles.ci_formText}>{data.description}</Text>
+              <Text style={Styles.ci_formLabel}>Status</Text>
+              <Text style={Styles.ci_formText}>{data.status}</Text>
+              <Text style={Styles.ci_formLabel}>Stichwörter</Text>
+              {data.labels.map(function(label, index){
+                   return <Text style={Styles.ci_formText} key={ index }>{label}</Text>;
+              })}
             </View>
         }
 
@@ -176,14 +200,17 @@ buttonText: {
 },
 button: {
   height: 36,
-  backgroundColor: '#48BBEC',
-  borderColor: '#48BBEC',
+  backgroundColor: '#D00000',
+  borderColor: '#FF0000',
   borderWidth: 1,
   borderRadius: 8,
-  margin: 5,
+  margin: 0,
   alignSelf: 'stretch',
   justifyContent: 'center'
 }
 });
 
 export default RoleView;
+
+// Horizontal Line
+//   <View style={{alignSelf:'center',position:'absolute',borderBottomColor:'black',borderBottomWidth:1,height:'50%',width:'90%'}}/>
