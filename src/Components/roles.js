@@ -92,7 +92,7 @@ export default class Roles extends Component {
     const { state, setParams } = navigation;
     const { params } = state;
     return {
-      title: "Rollen (Cloud)",
+      title: "Rollen",
       headerTintColor: Styles.ci_Header.color,
       headerStyle: {
         height: Styles.ci_Header.height,
@@ -124,6 +124,7 @@ export default class Roles extends Component {
     return (
       <View style={{ flex: 1 }}>
         <ListView
+            enableEmptySections={true}
             dataSource={this.state.dataSource}
             renderRow={item => this.renderItem(item, this.props.navigation)} />
         <StatusBar barStyle="light-content" />

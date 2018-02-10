@@ -13,7 +13,7 @@ var db = Firebase.firestore();
 
 const list = ['Loading...']
 
-export default class Tasks extends Component {
+export default class Relations extends Component {
 
   constructor(props) {
     super(props);
@@ -29,14 +29,14 @@ export default class Tasks extends Component {
   }
 
   setItemsFromFirestore() {
-    var tasks = db.collection("tasks").get();
-    tasks.then((querySnapshot) => {
+    var roles = db.collection("relations").get();
+    roles.then((querySnapshot) => {
       // get children as an array
       var items = [];
       querySnapshot.forEach((child) => {
         items.push({
-          title: `${child.data().title}`,
-          description: `${child.data().description}`,
+          title: `${child.data().type}`,
+          description: `${child.data().comment}`,
           id: `${child.id}`
         });
       });
@@ -75,10 +75,9 @@ export default class Tasks extends Component {
         const param = item.param;
         const route = item.route;
         const navigateAction = NavigationActions.navigate({
-          routeName: 'task',
+          routeName: 'relation',
           params: {
             title: `${item.title}`,
-            description: `${item.description}`,
             id: `${item.id}`
           }
         });
@@ -92,7 +91,7 @@ export default class Tasks extends Component {
     const { state, setParams } = navigation;
     const { params } = state;
     return {
-      title: "Aufgaben",
+      title: "Beziehungen",
       headerTintColor: Styles.ci_Header.color,
       headerStyle: {
         height: Styles.ci_Header.height,
@@ -107,11 +106,20 @@ export default class Tasks extends Component {
             const id = `${Uuid()}`;
             var data = {
               id: `${id}`,
-              title: `Neue Aufgabe (${id.substring(0,6)}...)`,
-              description: '',
+              type: 'isRelated',
+              source: {
+                item: '',
+                id: ''
+              },
+              target: {
+                item: '',
+                id: ''
+              },
+              comment: '',
+              skill: 0,
               status: 'draft'
             };
-            var setDoc = db.collection('tasks').doc(id).set(data);
+            var setDoc = db.collection('relations').doc(id).set(data);
           }}
         />
       )

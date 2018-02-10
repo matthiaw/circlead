@@ -4,9 +4,12 @@ import Home from "../Components/home";
 import Settings from "../Components/settings";
 import Roles from "../Components/roles";
 import Role from "../Components/role";
+import Task from "../Components/task";
 import Organisations from "../Components/organisations";
 import Authentification from "./../Authentification";
 import Rules from "../Components/rules";
+import Relations from "../Components/relations";
+import Relation from "../Components/relation";
 import Functions from "../Components/functions";
 import Tasks from "../Components/tasks";
 import Competences from "../Components/competences";
@@ -28,6 +31,12 @@ const navigator = StackNavigator(
   persons: {
     screen: Persons
   },
+  relations: {
+    screen: Relations
+  },
+  relation: {
+    screen: Relation
+  },
   rules: {
     screen: Rules
   },
@@ -48,6 +57,9 @@ const navigator = StackNavigator(
   },
   organisations: {
     screen: Organisations
+  },
+  task: {
+    screen: Task
   },
   tasks: {
     screen: Tasks

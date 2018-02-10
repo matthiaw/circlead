@@ -27,23 +27,22 @@ const status = t.enums.of([
   'closed'
 ], 'status')
 
-var RoleForm = t.struct({
+var TaskForm = t.struct({
   // Id is hidden, because it should not be editable
   title: t.String,                // a required string
-  abbreviation: t.String,         // a required string
   description: t.maybe(t.String),  // an optional string
   status,
   labels: t.list(t.String)
 });
 
-class RoleView extends Component {
+class TaskView extends Component {
 
   constructor(props) {
     super(props);
     this.submitForm = this.submitForm.bind(this);
-    this.removeRole = this.removeRole.bind(this);
+    this.removeTask = this.removeTask.bind(this);
 
-    var docRef = db.collection('roles').doc(this.props.navigation.state.params.id);
+    var docRef = db.collection('tasks').doc(this.props.navigation.state.params.id);
     docRef.get().then((doc) => {
       if (doc.exists) {
          //console.log("Data:" +doc.data());
@@ -51,7 +50,7 @@ class RoleView extends Component {
          this.toastify.show('Geladen', 1000);
       } else {
         // doc.data() will be undefined in this case
-        this.toastify.show('Keine Rolle gefunden', 1000);
+        this.toastify.show('Keine Aufgabe gefunden', 1000);
         //console.log("No such document!");
       }
     }).catch(function(error) {
@@ -68,11 +67,10 @@ class RoleView extends Component {
       var formData = this.refs.form.getValue(); // get values from form
       if (formData) { // if validation fails, value will be null
         // get correct dataset from cloud
-        var docRef = db.collection("roles").doc(`${params.id}`);
+        var docRef = db.collection("tasks").doc(`${params.id}`);
 
         // set data from form
         var data = {
-          abbreviation: `${formData.abbreviation}`,
           title: `${formData.title}`,
           description: `${formData.description}`,
           id: `${params.id}`,
@@ -101,11 +99,11 @@ class RoleView extends Component {
     navigation.setParams({ mode: params.mode === 'edit' ? '' : 'edit' })
   }
 
-  removeRole() {
+  removeTask() {
     const navigation = this.props.navigation;
     const params = navigation.state.params;
     const id = `${params.id}`;
-    var deleteDoc = db.collection('roles').doc(id).delete();
+    var deleteDoc = db.collection('tasks').doc(id).delete();
     navigation.goBack();
   }
 
@@ -118,15 +116,15 @@ class RoleView extends Component {
         let viewMode = null;
 
         if (params.mode === 'edit') {
-          // View to Edit the role
+          // View to Edit the task
           viewMode = <View style={Styles.ci_formContainer}>
             <Form
               ref="form"
-              type={RoleForm}
+              type={TaskForm}
               options={options}
               value={data}
             />
-            <TouchableHighlight style={styles.button} onPress={this.removeRole} underlayColor='#99d9f4'>
+            <TouchableHighlight style={styles.button} onPress={this.removeTask} underlayColor='#99d9f4'>
               <Text style={styles.buttonText}>Delete</Text>
             </TouchableHighlight>
           </View>
@@ -135,8 +133,6 @@ class RoleView extends Component {
             <View style={Styles.ci_formContainer}>
               <Text style={Styles.ci_formLabel}>ID</Text>
               <Text style={Styles.ci_formText}>{data.id}</Text>
-              <Text style={Styles.ci_formLabel}>Kürzel</Text>
-              <Text style={Styles.ci_formText}>{data.abbreviation}</Text>
               <Text style={Styles.ci_formLabel}>Titel</Text>
               <Text style={Styles.ci_formText}>{data.title}</Text>
               <Text style={Styles.ci_formLabel}>Beschreibung</Text>
@@ -210,7 +206,7 @@ button: {
 }
 });
 
-export default RoleView;
+export default TaskView;
 
 // Horizontal Line
 //   <View style={{alignSelf:'center',position:'absolute',borderBottomColor:'black',borderBottomWidth:1,height:'50%',width:'90%'}}/>

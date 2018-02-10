@@ -61,6 +61,12 @@ var renderData = JSON.parse(`{
         "param": "test param"
       },
       {
+        "label": "Beziehungen",
+        "description" : "Liste aller Beziehungen",
+        "route": "relations",
+        "param": ""
+      },
+      {
         "label": "Einstellungen",
         "description" : "Einstellungen von Circlead",
         "route": "settings",

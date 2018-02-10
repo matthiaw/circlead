@@ -20,6 +20,31 @@ const options = {
   stylesheet: stylesheet
 };
 
+const type = t.enums.of([
+  'isSkilled',           // Role -> Person
+  'isRelated',           // Role -> Function
+  'contains',            // Organisation -> Role
+  'takesResponsibility', // Role -> Responsibility
+  'isOrganized',         // Function -> Function
+  'worksOn',             // Role -> Task
+  'isSuccessor',         // Competence -> Competence
+  'isChild',             // Role -> Role
+  'hasAuthority',        // Role -> Authority
+  'isRuledBy',           // Role -> Rule
+  'isTrained'            // Person -> Task
+], 'type')
+
+const item = t.enums.of([
+  'role',
+  'function',
+  'person',
+  'responsibility',
+  'competence',
+  'authority',
+  'rule',
+  'task'
+], 'item')
+
 const status = t.enums.of([
   'draft',
   'deprecated',
@@ -27,23 +52,16 @@ const status = t.enums.of([
   'closed'
 ], 'status')
 
-var RoleForm = t.struct({
-  // Id is hidden, because it should not be editable
-  title: t.String,                // a required string
-  abbreviation: t.String,         // a required string
-  description: t.maybe(t.String),  // an optional string
-  status,
-  labels: t.list(t.String)
-});
-
-class RoleView extends Component {
+class RelationView extends Component {
 
   constructor(props) {
     super(props);
+    this.onChange = this.onChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
-    this.removeRole = this.removeRole.bind(this);
+    this.removeRelation = this.removeRelation.bind(this);
+    this.loadSourceRelations = this.loadSourceRelations.bind(this);
 
-    var docRef = db.collection('roles').doc(this.props.navigation.state.params.id);
+    var docRef = db.collection('relations').doc(this.props.navigation.state.params.id);
     docRef.get().then((doc) => {
       if (doc.exists) {
          //console.log("Data:" +doc.data());
@@ -51,13 +69,40 @@ class RoleView extends Component {
          this.toastify.show('Geladen', 1000);
       } else {
         // doc.data() will be undefined in this case
-        this.toastify.show('Keine Rolle gefunden', 1000);
+        this.toastify.show('Keine Beziehung gefunden', 1000);
         //console.log("No such document!");
       }
     }).catch(function(error) {
       this.toastify.show('Laden fehlgeschlagen', 1000);
       console.log("Error getting document:", error);
     })
+
+    //this.loadSourceRelations('role');
+  }
+
+  loadSourceRelations(type) {
+    if (type==='role') {
+    var docRef = db.collection('relations').where('source.item', '==', type);
+    var relations = docRef.get()
+    .then(querySnapshot => {
+      var dataitems = [];
+      querySnapshot.forEach((child) => {
+        dataitems.push(`${child.data().title} (${child.data().id})`);
+      });
+
+  //    if(this.componentMounted){
+        this.setState({
+          sourceItems: dataitems,
+        });
+    //  }
+      //  snapshot.forEach(doc => {
+      //      console.log(doc.id, '=>', doc.data());
+      //  });
+    })
+    .catch(err => {
+        console.log('Error getting documents', err);
+    });
+    }
   }
 
   submitForm() {
@@ -67,21 +112,28 @@ class RoleView extends Component {
     if (params.mode === 'edit') {
       var formData = this.refs.form.getValue(); // get values from form
       if (formData) { // if validation fails, value will be null
+  //      console.log("formData: "+formData);
         // get correct dataset from cloud
-        var docRef = db.collection("roles").doc(`${params.id}`);
+        var docRef = db.collection("relations").doc(`${params.id}`);
 
         // set data from form
         var data = {
-          abbreviation: `${formData.abbreviation}`,
-          title: `${formData.title}`,
-          description: `${formData.description}`,
+          type: `${formData.type}`,
+          comment: `${formData.comment}`,
+          source: {
+            item: `${formData.source.item}`,
+            id: `${formData.source.id}`
+          },
+          target: {
+            item: `${formData.target.item}`,
+            id: `${formData.target.id}`
+          },
           id: `${params.id}`,
           status: `${formData.status}`,
           labels: formData.labels
         };
 
-        //console.log(formData);
-        //console.log(data);
+  //      console.log("SAVE: "+data);
 
         this.setState({data: data});
 
@@ -101,46 +153,87 @@ class RoleView extends Component {
     navigation.setParams({ mode: params.mode === 'edit' ? '' : 'edit' })
   }
 
-  removeRole() {
+  removeRelation() {
     const navigation = this.props.navigation;
     const params = navigation.state.params;
     const id = `${params.id}`;
-    var deleteDoc = db.collection('roles').doc(id).delete();
+    var deleteDoc = db.collection('relations').doc(id).delete();
     navigation.goBack();
   }
+
+  onChange(value) {
+  //  var formData = this.refs.form.getValue(); // get values from form
+     if (value.type==='isRelated') {
+       //console.log("Change: "+formData.comment);
+       console.log(value.type);
+     } else {
+       console.log(value.type);
+     }
+     if (value.source) {
+       if (value.source.item) {
+         this.loadSourceRelations(value.source.item);
+       }
+     }
+   }
 
   render() {
     if (this.state) {
       if (this.state.data) {
+
         const data = this.state.data;
         const navigation = this.props.navigation;
         const params = navigation.state.params;
         let viewMode = null;
 
         if (params.mode === 'edit') {
+      //    if (  this.state.sourceItems ) {
           // View to Edit the role
           viewMode = <View style={Styles.ci_formContainer}>
             <Form
               ref="form"
-              type={RoleForm}
+              type={
+                t.struct({
+                  type,
+                  source: t.struct({
+                      id: t.maybe(t.String),
+    //                id: t.enums.of([
+    //                  this.state.sourceItems
+    //                ], 'id'),
+                    item
+                  }),
+                  target: t.struct({
+                    id: t.maybe(t.String),
+                    item
+                  }),
+                  comment: t.maybe(t.String),
+                  status,
+                  labels: t.list(t.String)
+                })
+              }
               options={options}
               value={data}
+              onChange={this.onChange}
             />
             <TouchableHighlight style={styles.button} onPress={this.removeRole} underlayColor='#99d9f4'>
               <Text style={styles.buttonText}>Delete</Text>
             </TouchableHighlight>
           </View>
+    //    }
         } else {
           viewMode =
             <View style={Styles.ci_formContainer}>
               <Text style={Styles.ci_formLabel}>ID</Text>
               <Text style={Styles.ci_formText}>{data.id}</Text>
-              <Text style={Styles.ci_formLabel}>Kürzel</Text>
-              <Text style={Styles.ci_formText}>{data.abbreviation}</Text>
-              <Text style={Styles.ci_formLabel}>Titel</Text>
-              <Text style={Styles.ci_formText}>{data.title}</Text>
-              <Text style={Styles.ci_formLabel}>Beschreibung</Text>
-              <Text style={Styles.ci_formText}>{data.description}</Text>
+              <Text style={Styles.ci_formLabel}>Typ</Text>
+              <Text style={Styles.ci_formText}>{data.type}</Text>
+              <Text style={Styles.ci_formLabel}>Von</Text>
+              <Text style={Styles.ci_formText}>Typ: {data.source.item}</Text>
+              <Text style={Styles.ci_formText}>Id: {data.source.id}</Text>
+              <Text style={Styles.ci_formLabel}>Nach</Text>
+              <Text style={Styles.ci_formText}>Typ: {data.target.item}</Text>
+              <Text style={Styles.ci_formText}>Id: {data.target.id}</Text>
+              <Text style={Styles.ci_formLabel}>Kommentar</Text>
+              <Text style={Styles.ci_formText}>{data.comment}</Text>
               <Text style={Styles.ci_formLabel}>Status</Text>
               <Text style={Styles.ci_formText}>{data.status}</Text>
               <Text style={Styles.ci_formLabel}>Stichwörter</Text>
@@ -210,7 +303,7 @@ button: {
 }
 });
 
-export default RoleView;
+export default RelationView;
 
 // Horizontal Line
 //   <View style={{alignSelf:'center',position:'absolute',borderBottomColor:'black',borderBottomWidth:1,height:'50%',width:'90%'}}/>
