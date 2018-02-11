@@ -36,7 +36,7 @@ export default class Relations extends Component {
       querySnapshot.forEach((child) => {
         items.push({
           title: `${child.data().type}`,
-          description: `${child.data().comment}`,
+          description: `${child.data().source.item} -> ${child.data().target.item} (${child.data().comment})`,
           id: `${child.id}`
         });
       });
@@ -106,14 +106,14 @@ export default class Relations extends Component {
             const id = `${Uuid()}`;
             var data = {
               id: `${id}`,
-              type: 'isRelated',
+              type: 'isChild',
               source: {
-                item: '',
-                id: ''
+                item: 'role',
+                sourceId: ''
               },
               target: {
-                item: '',
-                id: ''
+                item: 'role',
+                aimId: ''
               },
               comment: '',
               skill: 0,

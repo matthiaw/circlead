@@ -14,6 +14,7 @@ import Functions from "../Components/functions";
 import Tasks from "../Components/tasks";
 import Competences from "../Components/competences";
 import Persons from "../Components/persons";
+import Person from "../Components/person";
 import Responsibilities from "../Components/responsibilities";
 import Authorities from "../Components/authorities";
 
@@ -30,6 +31,9 @@ const navigator = StackNavigator(
   },
   persons: {
     screen: Persons
+  },
+  person: {
+    screen: Person
   },
   relations: {
     screen: Relations

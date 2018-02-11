@@ -29,21 +29,11 @@ const type = t.enums.of([
   'worksOn',             // Role -> Task
   'isSuccessor',         // Competence -> Competence
   'isChild',             // Role -> Role
+  'needsCompetence',     // Role -> Competence
   'hasAuthority',        // Role -> Authority
   'isRuledBy',           // Role -> Rule
   'isTrained'            // Person -> Task
 ], 'type')
-
-const item = t.enums.of([
-  'role',
-  'function',
-  'person',
-  'responsibility',
-  'competence',
-  'authority',
-  'rule',
-  'task'
-], 'item')
 
 const status = t.enums.of([
   'draft',
@@ -56,52 +46,144 @@ class RelationView extends Component {
 
   constructor(props) {
     super(props);
+    this.componentMounted = false;
     this.onChange = this.onChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.removeRelation = this.removeRelation.bind(this);
-    this.loadSourceRelations = this.loadSourceRelations.bind(this);
+    this.loadRelations = this.loadRelations.bind(this);
+    this.setRelations = this.setRelations.bind(this);
 
     var docRef = db.collection('relations').doc(this.props.navigation.state.params.id);
     docRef.get().then((doc) => {
       if (doc.exists) {
-         //console.log("Data:" +doc.data());
-         this.setState({data: doc.data()})
-         this.toastify.show('Geladen', 1000);
-      } else {
-        // doc.data() will be undefined in this case
-        this.toastify.show('Keine Beziehung gefunden', 1000);
-        //console.log("No such document!");
+        this.setRelations(doc.data().type, doc.data());
       }
     }).catch(function(error) {
-      this.toastify.show('Laden fehlgeschlagen', 1000);
       console.log("Error getting document:", error);
     })
-
-    //this.loadSourceRelations('role');
   }
 
-  loadSourceRelations(type) {
-    if (type==='role') {
-    var docRef = db.collection('relations').where('source.item', '==', type);
-    var relations = docRef.get()
-    .then(querySnapshot => {
-      var dataitems = [];
-      querySnapshot.forEach((child) => {
-        dataitems.push(`${child.data().title} (${child.data().id})`);
-      });
+  setRelations(type, data) {
+    if (type==='isSkilled') {
+      data.source.item = 'role';
+      data.target.item = 'person';
+      data.type = type;
+      this.loadRelations('source', 'role', data);
+      this.loadRelations('target', 'person', data);
+    } else if (type==='isRelated') {
+      data.source.item = 'role';
+      data.target.item = 'function';
+      data.type = type;
+      this.loadRelations('source', 'role', data);
+      this.loadRelations('target', 'function', data);
+    } else if (type==='worksOn') {
+      data.source.item = 'role';
+      data.target.item = 'task';
+      data.type = type;
+      this.loadRelations('source', 'role', data);
+      this.loadRelations('target', 'task', data);
+    } else if (type==='isChild') {
+      data.source.item = 'role';
+      data.target.item = 'role';
+      data.type = type;
+      this.loadRelations('source', 'role', data);
+      this.loadRelations('target', 'role', data);
+    } else if (type==='hasAuthority') {
+      data.source.item = 'role';
+      data.target.item = 'authority';
+      data.type = type;
+      this.loadRelations('source', 'role', data);
+      this.loadRelations('target', 'authority', data);
+    } else if (type==='isRuledBy') {
+      data.source.item = 'role';
+      data.target.item = 'rule';
+      data.type = type;
+      this.loadRelations('source', 'role', data);
+      this.loadRelations('target', 'rule', data);
+    } else if (type==='takesResponsibility') {
+      data.source.item = 'role';
+      data.target.item = 'responsibility';
+      data.type = type;
+      this.loadRelations('source', 'role', data);
+      this.loadRelations('target', 'responsibility', data);
+    } else if (type==='needsCompetence') {
+      data.source.item = 'role';
+      data.target.item = 'competence';
+      data.type = formData.type;
+      this.loadRelations('source', 'role', data);
+      this.loadRelations('target', 'competence', data);
+    } else if (type==='contains') {
+      data.source.item = 'organisation';
+      data.target.item = 'role';
+      data.type = type;
+      this.loadRelations('source', 'organisation', data);
+      this.loadRelations('target', 'role', data);
+    } else if (type==='isOrganized') {
+      data.source.item = 'function';
+      data.target.item = 'function';
+      data.type = type;
+      this.loadRelations('source', 'function', data);
+      this.loadRelations('target', 'function', data);
+    } else if (type==='isSuccessor') {
+      data.source.item = 'competence';
+      data.target.item = 'competence';
+      data.type = type;
+      this.loadRelations('source', 'competence', data);
+      this.loadRelations('target', 'competence', data);
+    } else if (type==='isTrained') {
+      data.source.item = 'person';
+      data.target.item = 'task';
+      data.type = type;
+      this.loadRelations('source', 'person', data);
+      this.loadRelations('target', 'task', data);
+    }
+  }
 
-  //    if(this.componentMounted){
-        this.setState({
-          sourceItems: dataitems,
+  loadRelations(direction, type, data) {
+    const navigation = this.props.navigation;
+    const params = navigation.state.params;
+
+    if (type==='role') {
+      var docRef = db.collection('roles');//.where('source.item', '==', type);
+      var relations = docRef.get().then(querySnapshot => {
+        var dataitems = [];
+        querySnapshot.forEach((child) => {
+          var entry = child.data().title +"("+child.data().id+")";
+          dataitems.push(entry);
         });
-    //  }
-      //  snapshot.forEach(doc => {
-      //      console.log(doc.id, '=>', doc.data());
-      //  });
-    })
-    .catch(err => {
-        console.log('Error getting documents', err);
-    });
+          if(this.componentMounted){
+        if (direction==='source') {
+            this.setState({data: data, sourceItems: dataitems});
+        };
+        if (direction==='target') {
+            this.setState({data: data, targetItems: dataitems});
+        };
+      }
+      })
+      .catch(err => {
+          console.log('Error getting documents', err);
+      });
+    }
+    if (type==='person') {
+      var docRef = db.collection('persons');//.where('source.item', '==', type);
+      var relations = docRef.get().then(querySnapshot => {
+        var dataitems = [];
+        querySnapshot.forEach((child) => {
+          var entry = child.data().firstname+" "+child.data().familyname +"("+child.data().id+")";
+          dataitems.push(entry);
+        });
+          if(this.componentMounted){
+        if (direction==='source') {
+            this.setState({data: data, sourceItems: dataitems});
+        };
+        if (direction==='target') {
+            this.setState({data: data, targetItems: dataitems});
+        };
+      }
+      })
+      .catch(err => {
+          console.log('Error getting documents', err);
+      });
     }
   }
 
@@ -111,8 +193,9 @@ class RelationView extends Component {
 
     if (params.mode === 'edit') {
       var formData = this.refs.form.getValue(); // get values from form
+
       if (formData) { // if validation fails, value will be null
-  //      console.log("formData: "+formData);
+
         // get correct dataset from cloud
         var docRef = db.collection("relations").doc(`${params.id}`);
 
@@ -122,31 +205,29 @@ class RelationView extends Component {
           comment: `${formData.comment}`,
           source: {
             item: `${formData.source.item}`,
-            id: `${formData.source.id}`
+            sourceId: `${formData.source.sourceId}`
           },
           target: {
             item: `${formData.target.item}`,
-            id: `${formData.target.id}`
+            aimId: `${formData.target.aimId}`
           },
           id: `${params.id}`,
           status: `${formData.status}`,
           labels: formData.labels
         };
 
-  //      console.log("SAVE: "+data);
-
-        this.setState({data: data});
+        if(this.componentMounted){
+          this.setState({data: data});
+        }
 
         this.toastify.show('Gespeichert', 1000);
 
         // Update cloud-document
         docRef.update(data);
-
       }
 
       // set navigation-params to actual values
       navigation.setParams(formData);
-
     }
 
     // switch the edit-mode
@@ -161,20 +242,14 @@ class RelationView extends Component {
     navigation.goBack();
   }
 
-  onChange(value) {
-  //  var formData = this.refs.form.getValue(); // get values from form
-     if (value.type==='isRelated') {
-       //console.log("Change: "+formData.comment);
-       console.log(value.type);
-     } else {
-       console.log(value.type);
-     }
-     if (value.source) {
-       if (value.source.item) {
-         this.loadSourceRelations(value.source.item);
-       }
-     }
-   }
+  onChange(formData) {
+    if(this.componentMounted){
+      this.setState({data: formData});
+    }
+    if (formData.type!==this.state.data.type) {
+       this.setRelations(formData.type, this.state.data);
+    }
+  }
 
   render() {
     if (this.state) {
@@ -186,24 +261,29 @@ class RelationView extends Component {
         let viewMode = null;
 
         if (params.mode === 'edit') {
-      //    if (  this.state.sourceItems ) {
+          var sourceId = t.enums.of(['empty', 's'], 'sourceId');
+          var aimId = t.enums.of(['empty', 'g'], 'aimId');
+          if (this.state.sourceItems) {
+            sourceId = t.enums.of(this.state.sourceItems, 'sourceId');
+          }
+          if (this.state.targetItems) {
+            aimId = t.enums.of(this.state.targetItems, 'aimId');
+          }
+
           // View to Edit the role
-          viewMode = <View style={Styles.ci_formContainer}>
+          viewMode = <View style={Styles.ci_formContainer}><ScrollView>
             <Form
               ref="form"
               type={
                 t.struct({
                   type,
                   source: t.struct({
-                      id: t.maybe(t.String),
-    //                id: t.enums.of([
-    //                  this.state.sourceItems
-    //                ], 'id'),
-                    item
+                      sourceId,
+                      item: t.maybe(t.String)
                   }),
                   target: t.struct({
-                    id: t.maybe(t.String),
-                    item
+                    aimId,
+                    item: t.maybe(t.String)
                   }),
                   comment: t.maybe(t.String),
                   status,
@@ -214,11 +294,10 @@ class RelationView extends Component {
               value={data}
               onChange={this.onChange}
             />
-            <TouchableHighlight style={styles.button} onPress={this.removeRole} underlayColor='#99d9f4'>
+            <TouchableHighlight style={styles.button} onPress={this.removeRelation} underlayColor='#99d9f4'>
               <Text style={styles.buttonText}>Delete</Text>
             </TouchableHighlight>
-          </View>
-    //    }
+          </ScrollView></View>
         } else {
           viewMode =
             <View style={Styles.ci_formContainer}>
@@ -227,11 +306,9 @@ class RelationView extends Component {
               <Text style={Styles.ci_formLabel}>Typ</Text>
               <Text style={Styles.ci_formText}>{data.type}</Text>
               <Text style={Styles.ci_formLabel}>Von</Text>
-              <Text style={Styles.ci_formText}>Typ: {data.source.item}</Text>
-              <Text style={Styles.ci_formText}>Id: {data.source.id}</Text>
+              <Text style={Styles.ci_formText}>{data.source.item}: {data.source.sourceId}</Text>
               <Text style={Styles.ci_formLabel}>Nach</Text>
-              <Text style={Styles.ci_formText}>Typ: {data.target.item}</Text>
-              <Text style={Styles.ci_formText}>Id: {data.target.id}</Text>
+              <Text style={Styles.ci_formText}>{data.target.item}: {data.target.aimId}</Text>
               <Text style={Styles.ci_formLabel}>Kommentar</Text>
               <Text style={Styles.ci_formText}>{data.comment}</Text>
               <Text style={Styles.ci_formLabel}>Status</Text>
@@ -256,7 +333,12 @@ class RelationView extends Component {
 
   }
 
+  componentWillUnmount() {
+     this.componentMounted = false;
+  }
+
   componentDidMount () {
+    this.componentMounted = true;
     this.props.navigation.setParams({ handleEdit: this.submitForm })
   }
 
@@ -304,6 +386,3 @@ button: {
 });
 
 export default RelationView;
-
-// Horizontal Line
-//   <View style={{alignSelf:'center',position:'absolute',borderBottomColor:'black',borderBottomWidth:1,height:'50%',width:'90%'}}/>
