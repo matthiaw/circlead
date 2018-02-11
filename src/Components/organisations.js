@@ -1,61 +1,125 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Modal, Button, TouchableOpacity } from "react-native";
-import {NO_Title, Styles} from "./../Util";
+import { Text, View, TouchableHighlight, TouchableOpacity, ListView, StatusBar, ScrollView, StyleSheet } from "react-native";
+import Firebase from "./../Util/firebase";
+import Item from "./item";
+import {Uuid, Styles} from "./../Util";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { NavigationActions, SafeAreaView } from "react-navigation";
+import { connect } from "react-redux";
+
+var db = Firebase.firestore();
+
+const list = ['Loading...']
 
 export default class Organisations extends Component {
-  static navigationOptions = NO_Title("Organisationen");
 
-  state = {
-   modalVisible: false,
- };
+  constructor(props) {
+    super(props);
+    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+    this.componentMounted = false;
+    this.state = {
+      dataSource: this.ds.cloneWithRows(list),
+    };
 
- openModal() {
-   this.setState({modalVisible:true});
- }
+    this.mounted = true;
+    this.renderItem = this.renderItem.bind(this)
+    this.setItemsFromFirestore = this.setItemsFromFirestore.bind(this);
+  }
 
- closeModal() {
-   this.setState({modalVisible:false});
- }
+  setItemsFromFirestore() {
+    var roles = db.collection("organisations").get();
+    roles.then((querySnapshot) => {
+      // get children as an array
+      var items = [];
+      querySnapshot.forEach((child) => {
+        items.push({
+          title: `${child.data().title}`,
+          description: `${child.data().description}`,
+          id: `${child.id}`
+        });
+      });
 
+      if(this.componentMounted){
+        this.setState({
+          dataSource: this.ds.cloneWithRows(items),
+        });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+     this.componentMounted = false;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    this.setItemsFromFirestore();
+  }
+
+  componentDidMount() {
+    this.componentMounted = true;
+    this.setItemsFromFirestore();
+  }
+
+  renderItem(item, navigation) {
+    return (
+      <Item key={Uuid()} label={item.title} description={item.description} onPress={ () => {
+        const param = item.param;
+        const route = item.route;
+        const navigateAction = NavigationActions.navigate({
+          routeName: 'organisation',
+          params: {
+            title: `${item.title}`,
+            description: `${item.description}`,
+            id: `${item.id}`
+          }
+        });
+        navigation.dispatch(navigateAction);
+      }} />
+    )
+  }
+
+  static navigationOptions = props => {
+    const { navigation } = props;
+    const { state, setParams } = navigation;
+    const { params } = state;
+    return {
+      title: "Organisationen",
+      headerTintColor: Styles.ci_Header.color,
+      headerStyle: {
+        height: Styles.ci_Header.height,
+        backgroundColor: Styles.ci_Header.backgroundColor
+      },
+      headerRight: (
+        <FontAwesome
+          name= {'plus'}
+          size={18}
+          style={{ color: Styles.ci_Header.color, paddingHorizontal: 5}}
+          onPress={() => {
+            const id = `${Uuid()}`;
+            var data = {
+              id: `${id}`,
+              title: `Neue Organisation ${id.substring(0,6)}...)`,
+              description: '',
+              status: 'draft'
+            };
+            var setDoc = db.collection('organisations').doc(id).set(data);
+          }}
+        />
+      )
+    };
+  };
+
+  // https://console.firebase.google.com/u/0/project/circlead-f1cab/database/firestore/data~2Froles~2FNOa1SiMVzXgzpYL0upvg
   render() {
     return (
-          <View style={styles.container}>
-            <Modal
-                visible={this.state.modalVisible}
-                animationType={'slide'}
-                onRequestClose={() => this.closeModal()}
-            >
-              <View style={styles.modalContainer}>
-                <View style={styles.innerContainer}>
-                  <Text>This is content inside of modal component</Text>
-                  <Button
-                      onPress={() => this.closeModal()}
-                      title="Close modal"
-                  >
-                  </Button>
-                </View>
-              </View>
-            </Modal>
-            <Button
-                onPress={() => this.openModal()}
-                title="Open modal"
-            />
-          </View>
-      );
+      <View style={{ flex: 1 }}>
+        <ListView
+            enableEmptySections={true}
+            dataSource={this.state.dataSource}
+            renderRow={item => this.renderItem(item, this.props.navigation)} />
+        <StatusBar barStyle="light-content" />
+      </View>
+    );
   }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'grey',
-  },
-  innerContainer: {
-    alignItems: 'center',
-  },
-});
+}
