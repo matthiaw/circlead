@@ -1,5 +1,4 @@
-# Circlead
-
+# Circlead (JS)
 React-Native Application which uses Cloud-Database [Firebase](https://firebase.google.com/), React-Navigation and Redux (see [Example](https://hackernoon.com/a-comprehensive-guide-for-integrating-react-navigation-with-redux-including-authentication-flow-cb7b90611adf)).
 
 ## Pre-install
